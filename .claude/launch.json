@@ -1,0 +1,14 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "peach",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-c",
+        "import os, functools, http.server, socketserver; port = int(os.environ.get('PORT', '4174')); handler = functools.partial(http.server.SimpleHTTPRequestHandler, directory='docs'); socketserver.TCPServer.allow_reuse_address = True; print('serving docs/ on', port, flush=True); socketserver.TCPServer(('', port), handler).serve_forever()"
+      ],
+      "autoPort": true
+    }
+  ]
+}
