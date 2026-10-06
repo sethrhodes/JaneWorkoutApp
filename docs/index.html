@@ -272,6 +272,15 @@ svg.i { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-widt
 #push .bar-top .ttl { flex: 1; text-align: center; font-weight: 650; font-size: 17px; opacity: 0; transition: opacity .2s; }
 #push .bar-top.scrolled .ttl { opacity: 1; }
 #push .bar-top.scrolled { box-shadow: 0 .5px 0 var(--line); }
+.vtext, .verse, .vline { font-family: ui-serif, "New York", "Iowan Old Style", Georgia, serif; }
+.qmini .vtext { font-size: 17px; line-height: 1.45; margin-top: 6px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.vline { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-weight: 400 !important; }
+.qcard { position: relative; border-radius: 28px; padding: 34px 24px 26px; overflow: hidden;
+  background: linear-gradient(160deg, var(--accent-sf) 0%, var(--surface) 70%); box-shadow: var(--shadow); }
+.qmark { position: absolute; top: -18px; left: 14px; font: 700 120px/1 ui-serif, Georgia, serif; color: var(--accent); opacity: .22; }
+.verse { position: relative; font-size: 25px; line-height: 1.42; letter-spacing: -0.01em; margin: 0; text-wrap: pretty; }
+.qsrc { margin-top: 20px; font-size: 15px; font-weight: 600; color: var(--accent-ink); }
+.qsrc span { font-weight: 500; color: var(--ink-3); font-size: 13px; }
 #push .body { max-width: 560px; margin: 0 auto; padding: 6px 16px calc(env(safe-area-inset-bottom) + 120px); }
 
 /* -- Sheet --------------------------------------------------- */
@@ -449,6 +458,67 @@ const DEFAULT_SESSIONS = {
     it('chest_press',3,10,12), it('assisted_pullup',3,8,10), it('rear_fly',3,12,15),
     it('db_curl',2,12,15), it('tri_pushdown',2,12,15), it('reverse_crunch',3,12,15), it('pallof',3,10,12) ]}
 };
+/* ===========================================================
+   DAILY VERSE
+   From the Dhammapada, in F. Max Müller's 1881 translation
+   (public domain), word for word. Many "Buddha quotes" online
+   are invented, so every verse here is real and numbered.
+   [verse, chapter, text]
+   =========================================================== */
+const QUOTES = [
+  [2, "The Twin-Verses", "All that we are is the result of what we have thought: it is founded on our thoughts, it is made up of our thoughts. If a man speaks or acts with a pure thought, happiness follows him, like a shadow that never leaves him."],
+  [5, "The Twin-Verses", "For hatred does not cease by hatred at any time: hatred ceases by love, this is an old rule."],
+  [13, "The Twin-Verses", "As rain breaks through an ill-thatched house, passion will break through an unreflecting mind."],
+  [14, "The Twin-Verses", "As rain does not break through a well-thatched house, passion will not break through a well-reflecting mind."],
+  [25, "On Earnestness", "By rousing himself, by earnestness, by restraint and control, the wise man may make for himself an island which no flood can overwhelm."],
+  [29, "On Earnestness", "Earnest among the thoughtless, awake among the sleepers, the wise man advances like a racer, leaving behind the hack."],
+  [33, "Thought", "As a fletcher makes straight his arrow, a wise man makes straight his trembling and unsteady thought, which is difficult to guard, difficult to hold back."],
+  [35, "Thought", "It is good to tame the mind, which is difficult to hold in and flighty, rushing wherever it listeth; a tamed mind brings happiness."],
+  [36, "Thought", "Let the wise man guard his thoughts, for they are difficult to perceive, very artful, and they rush wherever they list: thoughts well guarded bring happiness."],
+  [43, "Thought", "Not a mother, not a father will do so much, nor any other relative; a well-directed mind will do us greater service."],
+  [50, "Flowers", "Not the perversities of others, not their sins of commission or omission, but his own misdeeds and negligences should a sage take notice of."],
+  [52, "Flowers", "But, like a beautiful flower, full of colour and full of scent, are the fine and fruitful words of him who acts accordingly."],
+  [53, "Flowers", "As many kinds of wreaths can be made from a heap of flowers, so many good things may be achieved by a mortal when once he is born."],
+  [54, "Flowers", "The scent of flowers does not travel against the wind, nor (that of) sandal-wood, or of Tagara and Mallika flowers; but the odour of good people travels even against the wind; a good man pervades every place."],
+  [80, "The Wise Man (Pandita)", "Well-makers lead the water (wherever they like); fletchers bend the arrow; carpenters bend a log of wood; wise people fashion themselves."],
+  [81, "The Wise Man (Pandita)", "As a solid rock is not shaken by the wind, wise people falter not amidst blame and praise."],
+  [82, "The Wise Man (Pandita)", "Wise people, after they have listened to the laws, become serene, like a deep, smooth, and still lake."],
+  [100, "The Thousands", "Even though a speech be a thousand (of words), but made up of senseless words, one word of sense is better, which if a man hears, he becomes quiet."],
+  [103, "The Thousands", "If one man conquer in battle a thousand times thousand men, and if another conquer himself, he is the greatest of conquerors."],
+  [110, "The Thousands", "But he who lives a hundred years, vicious and unrestrained, a life of one day is better if a man is virtuous and reflecting."],
+  [112, "The Thousands", "And he who lives a hundred years, idle and weak, a life of one day is better if a man has attained firm strength."],
+  [116, "Evil", "If a man would hasten towards the good, he should keep his thought away from evil; if a man does what is good slothfully, his mind delights in evil."],
+  [121, "Evil", "Let no man think lightly of evil, saying in his heart, It will not come nigh unto me. Even by the falling of water-drops a water-pot is filled; the fool becomes full of evil, even if he gather it little by little."],
+  [122, "Evil", "Let no man think lightly of good, saying in his heart, It will not come nigh unto me. Even by the falling of water-drops a water-pot is filled; the wise man becomes full of good, even if he gather it little by little."],
+  [158, "Self", "Let each man direct himself first to what is proper, then let him teach others; thus a wise man will not suffer."],
+  [160, "Self", "Self is the lord of self, who else could be the lord? With self well subdued, a man finds a lord such as few can find."],
+  [165, "Self", "By oneself the evil is done, by oneself one suffers; by oneself evil is left undone, by oneself one is purified. Purity and impurity belong to oneself, no one can purify another."],
+  [183, "The Buddha (The Awakened)", "Not to commit any sin, to do good, and to purify one's mind, that is the teaching of (all) the Awakened."],
+  [197, "Happiness", "Let us live happily then, not hating those who hate us! among men who hate us let us dwell free from hatred!"],
+  [200, "Happiness", "Let us live happily then, though we call nothing our own! We shall be like the bright gods, feeding on happiness!"],
+  [201, "Happiness", "Victory breeds hatred, for the conquered is unhappy. He who has given up both victory and defeat, he, the contented, is happy."],
+  [204, "Happiness", "Health is the greatest of gifts, contentedness the best riches; trust is the best of relationships, Nirvana the highest happiness."],
+  [223, "Anger", "Let a man overcome anger by love, let him overcome evil by good; let him overcome the greedy by liberality, the liar by truth!"],
+  [224, "Anger", "Speak the truth, do not yield to anger; give, if thou art asked for little; by these three steps thou wilt go near the gods."],
+  [227, "Anger", "This is an old saying, O Atula, this is not only of to-day: 'They blame him who sits silent, they blame him who speaks much, they also blame him who says little; there is no one on earth who is not blamed.'"],
+  [228, "Anger", "There never was, there never will be, nor is there now, a man who is always blamed, or a man who is always praised."],
+  [239, "Impurity", "Let a wise man blow off the impurities of his self, as a smith blows off the impurities of silver one by one, little by little, and from time to time."],
+  [252, "Impurity", "The fault of others is easily perceived, but that of oneself is difficult to perceive; a man winnows his neighbour's faults like chaff, but his own fault he hides, as a cheat hides the bad die from the gambler."],
+  [276, "The Way", "You yourself must make an effort. The Tathagatas (Buddhas) are only preachers. The thoughtful who enter the way are freed from the bondage of Mara."],
+  [282, "The Way", "Through zeal knowledge is gotten, through lack of zeal knowledge is lost; let a man who knows this double path of gain and loss thus place himself that knowledge may grow."],
+  [290, "Miscellaneous", "If by leaving a small pleasure one sees a great pleasure, let a wise man leave the small pleasure, and look to the great."],
+  [327, "The Elephant", "Be not thoughtless, watch your thoughts! Draw yourself out of the evil way, like an elephant sunk in mud."],
+  [333, "The Elephant", "Pleasant is virtue lasting to old age, pleasant is a faith firmly rooted; pleasant is attainment of intelligence, pleasant is avoiding of sins."],
+  [379, "The Bhikshu (Mendicant)", "Rouse thyself by thyself, examine thyself by thyself, thus self-protected and attentive wilt thou live happily, O Bhikshu!"],
+  [380, "The Bhikshu (Mendicant)", "For self is the lord of self, self is the refuge of self; therefore curb thyself as the merchant curbs a good horse."]
+];
+/* Step through the list 17 at a time, so neighbouring verses
+   (which often answer each other) land weeks apart. */
+function verseFor(k) {
+  const day = Math.round(fromKey(k).getTime() / 86400000);
+  return QUOTES[((day * 17) % QUOTES.length + QUOTES.length) % QUOTES.length];
+}
+
 const DEFAULT_ORDER = { 4:['g_thrust','upper_a','g_shape','g_hinge'], 5:['g_thrust','upper_a','g_shape','upper_b','g_hinge'] };
 
 /* ===========================================================
@@ -539,12 +609,12 @@ const BASE_FOODS = FOOD_ROWS.map(toFood);
    "Reset plan" can always restore the original.
    =========================================================== */
 const LS = 'peach.v1';
-const BUILD = '2026-10-04c';
+const BUILD = '2026-10-06a';
 const clone = o => JSON.parse(JSON.stringify(o));
 let S = {
   name:'Jane', weight:115, protein:105, kcal:2050, fat:60, days:5,
   sessions: clone(DEFAULT_SESSIONS), order: clone(DEFAULT_ORDER),
-  logs:{}, done:{}, food:{}, foods:[], favs:{}, bw:{}, draft:null
+  logs:{}, done:{}, food:{}, foods:[], favs:{}, qfav:{}, bw:{}, draft:null
 };
 function load() {
   try { const d = JSON.parse(localStorage.getItem(LS) || 'null'); if (d) S = Object.assign(S, d); } catch (e) {}
@@ -919,6 +989,11 @@ function vToday() {
   return `
   <div class="eyebrow">${DAYNAME[d.getDay()]}, ${niceDate(t)}</div>
   <h1>${greeting()}, ${esc(S.name)}</h1>
+  ${(() => { const q = verseFor(t); return `<div class="card press qmini" data-act="quote">
+    <div class="row" style="align-items:flex-start"><div class="grow">
+      <div class="eyebrow" style="color:var(--accent-ink)">Verse of the day</div>
+      <div class="vtext">${esc(q[2])}</div>
+      <div class="tiny" style="margin-top:6px">Dhammapada ${q[0]}</div></div>${ICON.chev}</div></div>`; })()}
 
   <div class="card">
     <div class="row"><div class="grow"><h3>${doneWk} of ${S.days} sessions</h3><div class="tiny">This week · dot = protein hit</div></div>
@@ -1237,10 +1312,35 @@ function vProgress() {
 /* ===========================================================
    PUSH VIEWS
    =========================================================== */
+function vQuote(v) {
+  const k = addDays(today(), v.off || 0);
+  const q = v.n ? QUOTES.find(x => x[0] === v.n) : verseFor(k), saved = !!S.qfav[q[0]];
+  const savedList = QUOTES.filter(x => S.qfav[x[0]]);
+  return `${topBar('Verse of the day', '', '')}
+  <div class="body">
+    <div class="eyebrow">${v.n ? 'Saved verse' : !v.off ? 'Today' : v.off === -1 ? 'Yesterday' : niceDate(k)}</div>
+    <h1>Verse of the day</h1>
+    <div class="qcard">
+      <div class="qmark" aria-hidden="true">“</div>
+      <p class="verse">${esc(q[2])}</p>
+      <div class="qsrc">Dhammapada, verse ${q[0]}<br><span>Chapter: ${esc(q[1])}</span></div>
+    </div>
+    <div class="row" style="justify-content:center;gap:14px;margin:18px 0 6px">
+      ${v.n ? '' : `<button class="icon-btn" data-act="qday" data-arg="-1" aria-label="Previous day">${ICON.left}</button>`}
+      <button class="btn ${saved ? '' : 'ghost'} sm" data-act="qsave" data-arg="${q[0]}" style="min-width:120px">${saved ? '♥ Saved' : '♡ Save'}</button>
+      ${v.n ? '' : `<button class="icon-btn" data-act="qday" data-arg="1" aria-label="Next day" ${!v.off ? 'disabled style="opacity:.35"' : ''}>${ICON.right}</button>`}
+    </div>
+    <div class="tiny" style="text-align:center">A new verse every morning.</div>
+    ${savedList.length ? `<div class="sec"><h2>Saved</h2><span class="tiny">${savedList.length}</span></div>
+      <div class="list">${savedList.map(x => `<div class="li tap" data-act="qopen" data-arg="${x[0]}">
+        <div class="grow"><div class="t vline">${esc(x[2])}</div><div class="s">Dhammapada ${x[0]}</div></div>${ICON.chev}</div>`).join('')}</div>` : ''}
+    <div class="tiny" style="text-align:center;margin-top:24px">Translated from the Pali by F. Max Müller (1881).</div>
+  </div>`;
+}
 function renderPush() {
   const P = $('#push'), v = UI.push; if (!v) return;
   const st = P.scrollTop;
-  P.innerHTML = v.type === 'workout' ? vWorkout() : vSessionEdit(v.id);
+  P.innerHTML = v.type === 'workout' ? vWorkout() : v.type === 'quote' ? vQuote(v) : vSessionEdit(v.id);
   P.scrollTop = st;
   if (v.type === 'sess' && UI.editSess) sortable($('#ex-list'), (a, b) => { moveIn(sess(v.id).items, a, b); save(); renderPush(); });
   tickElapsed();
@@ -1309,7 +1409,13 @@ document.addEventListener('click', e => {
     case 'edit-sess': UI.editSess = !UI.editSess; renderPush(); break;
     case 'edit-item': itemSheet(UI.push.id, +arg); break;
     case 'add-ex': librarySheet(UI.push.id, null, null); break;
-    case 'back': closePush(); break;
+    case 'back':
+      if (UI.push && UI.push.type === 'quote' && UI.push.n && UI.push.from) { UI.push = UI.push.from; renderPush(); return; }
+      closePush(); break;
+    case 'quote': openPush({ type:'quote', off: 0 }); break;
+    case 'qday': { const o = (UI.push.off || 0) + +arg; if (o > 0) return; UI.push = { type:'quote', off: o }; renderPush(); break; }
+    case 'qsave': { const n = +arg; if (S.qfav[n]) delete S.qfav[n]; else S.qfav[n] = 1; save(); buzz(10); renderPush(); break; }
+    case 'qopen': UI.push = { type:'quote', n: +arg, from: UI.push }; renderPush(); $('#push').scrollTop = 0; break;
     case 'start':
       if (S.draft && S.draft.sid !== arg) {
         if (!confirm('You have a workout in progress. Start a different one? Sets you ticked are already saved.')) return;
