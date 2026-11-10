@@ -377,9 +377,9 @@ svg.i { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-widt
 /* ===========================================================
    EXERCISES
    Glutes grow from hip extension, abduction and kickbacks.
-   Squats, lunges, split squats, step-ups, leg press and leg
-   extensions are left out on purpose: they load the quads,
-   which is the "bigger legs" she doesn't want.
+   The lunges, step-ups and split squats in the plan are
+   glute-biased (torso lean, push through the heel). Squats,
+   leg press and leg extensions stay out: they load the quads.
    p = movement pattern, used for swaps.
    =========================================================== */
 const EX = {
@@ -394,10 +394,12 @@ const EX = {
   bstance:       { n:'B-Stance Hip Thrust', p:'thrust', rest:90, cue:'Per side. Working foot flat, the other heel lifted a few inches forward as a kickstand. Most of the load lands on one glute, so go lighter than your normal thrust.' },
   sl_thrust:     { n:'Single-Leg Hip Thrust', p:'thrust', rest:75, cue:'Per side. Shoulders on the bench, one foot planted. Bodyweight first; then hold a dumbbell on the hip. Once 12 clean reps are easy with bodyweight, it is too light to grow anything.' },
   glute_bridge:  { n:'Barbell Glute Bridge', p:'thrust', rest:120, cue:'From the floor, shorter range than a thrust so you can go heavy with almost no quad involvement. Pause at the top.' },
+  kas_bridge:    { n:'Kas Glute Bridge', p:'thrust', rest:90, cue:'Barbell across the hips, shoulders on a bench. Short range at the top only, constant tension, ribs down. Biases the glute and keeps the quad out of it.' },
   frog_pump:     { n:'Frog Pumps', p:'thrust', rest:60, bw:true, cue:'Soles of the feet together, knees out, lying on your back. Fast, short pumps squeezing hard at the top. A finisher, but still loaded: hold a dumbbell or plate on your hips so 20 reps is hard. Bodyweight-only frog pumps turn into cardio.' },
 
   seated_abd:    { n:'Seated Hip Abduction', p:'abduct', rest:75, cue:'Sit tall to hit the glute medius — the upper-side "shelf" that makes the booty look round from the front and back. Pause 1 s fully open, then come back slowly.' },
   abd_lean:      { n:'Hip Abduction · Lean Forward', p:'abduct', rest:75, cue:'Same machine, but hinge forward over it with hips pushed back. That angle shifts the work into glute max, the main bulk of the booty. Grab the frame and drive the knees apart.' },
+  band_abd:      { n:'Seated Abduction Burnout', p:'abduct', rest:45, burn:true, cue:'Light load on the machine, or a band. Constant tension, then finish with partial pulses at the end range. Chase the burn.' },
   cable_abd:     { n:'Standing Cable Abduction', p:'abduct', rest:75, cue:'Per side. Ankle strap, stand side-on to the stack, lean a little toward it. Sweep the leg out and slightly back, leading with the heel.' },
   side_raise:    { n:'Side-Lying Hip Raise', p:'abduct', rest:75, bw:true, cue:'Per side. Lie on your side with the bottom knee on a bench and lift your hips up — the top glute does the work.' },
 
@@ -408,19 +410,30 @@ const EX = {
   back_ext:      { n:'45° Back Extension · Glute Bias', p:'hinge', rest:90, cue:'Feet turned out, pad just below the hip bones, upper back rounded, chin tucked. Push your hips into the pad as you rise. That turns a lower-back exercise into one of the best glute builders. Hold a plate or dumbbell to your chest once 12 reps are easy.' },
   reverse_hyper: { n:'Reverse Hyperextension', p:'hinge', rest:90, cue:'Lift the legs with the glutes, squeeze at the top, control the swing down. No machine? Do these lying face-down off the end of a bench.' },
   pull_through:  { n:'Cable Pull-Through', p:'hinge', rest:90, cue:'Rope between the legs, facing away from the stack. Push the hips back until you feel the stretch, then drive them forward and squeeze hard at the top.' },
-  db_rdl:        { n:'Dumbbell RDL', p:'hinge', rest:90, cue:'Heads up: this also builds hamstrings, so it is not in the default plan. Fine as a swap if she wants it. Hips back, soft knees, stop when the stretch runs out.' },
+  rdl:           { n:'Romanian Deadlift', p:'hinge', rest:120, cue:'Hinge at the hips, soft knees, bar grazing the legs. Feel the hamstring stretch. Push the hips back, not down.' },
+  db_rdl:        { n:'Dumbbell RDL', p:'hinge', rest:90, cue:'Same as the barbell RDL with a dumbbell in each hand. Hips back, soft knees, stop when the stretch runs out.' },
+
+  rev_lunge:     { n:'Reverse Lunge · Torso Lean', p:'lunge', rest:90, cue:'Per side. Step back and lean your chest slightly forward over the front thigh. The lean shifts the load off the quad and onto the glute.' },
+  bss:           { n:'Bulgarian Split Squat · Glute Bias', p:'lunge', rest:90, cue:'Per side. Back foot on a bench, long stride, lean the torso forward and drop straight down into a deep glute stretch. The lean keeps it glute, not quad.' },
+  stepup:        { n:'Glute Step-Up', p:'lunge', rest:75, cue:'Per side. Tall box, push through the heel of the top foot with as little push from the bottom leg as you can. No bouncing.' },
 
   lat_pulldown:  { n:'Lat Pulldown', p:'pull', rest:75, cue:'Elbows drive down toward your back pockets. Chest up, no leaning way back.' },
   cable_row:     { n:'Seated Cable Row', p:'pull', rest:75, cue:'Squeeze the shoulder blades together and pause. Good for posture, which makes everything else look better.' },
+  pullup:        { n:'Pull-Up · Band Assist', p:'pull', rest:90, bw:true, cue:'Full hang to chin over the bar, drive the elbows down and squeeze the lats. Loop a band under your feet to assist. Once they get easy, hold a dumbbell between your feet.' },
   assisted_pullup:{ n:'Assisted Pull-Up', p:'pull', rest:90, cue:'Use as much assistance as you need for clean reps. Lower slowly.' },
   db_row:        { n:'Single-Arm Dumbbell Row', p:'pull', rest:60, cue:'Per side. Knee and hand on the bench, row toward your hip.' },
   shoulder_press:{ n:'Dumbbell Shoulder Press', p:'push', rest:75, cue:'Seated, back supported. Press up and slightly in.' },
+  inc_db_press:  { n:'Incline Dumbbell Press', p:'push', rest:90, cue:'Bench at about 30°. Control the way down, press up in a slight inward arc. Log one dumbbell\u2019s weight.' },
   chest_press:   { n:'Machine Chest Press', p:'push', rest:75, cue:'Shoulders down and back, press without shrugging.' },
   pushup:        { n:'Push-Up', p:'push', rest:60, bw:true, cue:'Hands on a bench to make it easier. Body in one straight line.' },
   lateral_raise: { n:'Lateral Raise', p:'delts', rest:45, cue:'Light weight, lead with the elbows. Rounder shoulders make the waist look smaller.' },
+  rear_delt_fly: { n:'Bent-Over Rear Delt Fly', p:'delts', rest:45, cue:'Hinge at the hips, light dumbbells, raise out to a T with a soft bend in the elbows. Good for posture and the upper back.' },
   rear_fly:      { n:'Rear Delt Fly', p:'delts', rest:45, cue:'Machine or cables. Arms wide, squeeze between the shoulder blades.' },
   tri_pushdown:  { n:'Triceps Pushdown', p:'arms', rest:45, cue:'Elbows pinned at your sides.' },
+  db_skull:      { n:'Lying Dumbbell Triceps Extension', p:'arms', rest:60, cue:'Lie on a bench, dumbbells over your chest. Lower them toward your ears with the elbows fixed, then extend. Log one dumbbell\u2019s weight.' },
   db_curl:       { n:'Dumbbell Curl', p:'arms', rest:45, cue:'No swinging. Slow on the way down.' },
+  weighted_crunch:{ n:'Weighted Crunch', p:'core', rest:45, cue:'Hold a dumbbell on your chest, curl the ribs toward your hips, control the way down.' },
+  hang_leg:      { n:'Hanging Leg Raise', p:'core', rest:45, bw:true, cue:'Curl the pelvis up (posterior tilt) rather than just swinging the legs. Lower slowly.' },
   cable_crunch:  { n:'Cable Crunch', p:'core', rest:45, cue:'Kneel, rope by your ears, curl your ribs toward your hips.' },
   dead_bug:      { n:'Dead Bug', p:'core', rest:30, bw:true, cue:'Lower back pressed into the floor the whole time. Per side.' },
   plank:         { n:'Plank', p:'core', rest:30, bw:true, sec:true, cue:'Squeeze the glutes and brace. Log seconds as reps.' },
@@ -429,35 +442,43 @@ const EX = {
   pallof:        { n:'Pallof Press', p:'core', rest:30, cue:'Per side. Press the handle straight out and don’t let it twist you.' }
 };
 const PATTERNS = {
-  activate:'Warm-up', thrust:'Thrust & bridge', abduct:'Abduction', kick:'Kickback', hinge:'Glute hinge',
+  activate:'Warm-up', thrust:'Thrust & bridge', abduct:'Abduction', kick:'Kickback', hinge:'Glute hinge', lunge:'Lunge & step-up',
   pull:'Back', push:'Push', delts:'Shoulders', arms:'Arms', core:'Core'
 };
-const GLUTE_P = { activate:1, thrust:1, abduct:1, kick:1, hinge:1 };
+const GLUTE_P = { activate:1, thrust:1, abduct:1, kick:1, hinge:1, lunge:1 };
 
 /* ===========================================================
    THE PROGRAM
-   Glutes 3× a week either way. Sessions aren't tied to
-   weekdays, so she just does whichever is next when she
-   gets to the gym.
+   The Peach Plan she ran over the summer: five days, glutes
+   three of them, upper body split into push and pull. Sessions
+   aren't tied to weekdays, so she just does whichever is next.
    =========================================================== */
 const it = (x, sets, lo, hi) => ({ x, sets, rep:[lo, hi] });
 const DEFAULT_SESSIONS = {
-  g_thrust: { name:'Glutes · Thrust', sub:'Heavy day', kind:'glute', items:[
-    it('clamshell',2,15,20), it('hip_thrust',4,6,10), it('bstance',3,8,10),
-    it('back_ext',3,8,12), it('abd_lean',3,10,15), it('kick_cable',2,10,12) ]},
-  upper_a:  { name:'Upper + Abs \u00b7 Pull', sub:'Back, shoulders & abs', kind:'upper', items:[
-    it('lat_pulldown',3,10,12), it('cable_row',3,10,12), it('shoulder_press',3,10,12),
-    it('lateral_raise',3,12,15), it('cable_crunch',3,12,15), it('knee_raise',3,10,15) ]},
-  g_shape:  { name:'Glutes · Shape', sub:'Side & upper glute', kind:'glute', items:[
-    it('band_walk',2,15,20), it('kick_machine',3,8,12), it('cable_abd',3,10,12),
-    it('smith_thrust',3,6,10), it('seated_abd',3,10,15), it('frog_pump',2,15,20) ]},
-  g_hinge:  { name:'Glutes · Hinge', sub:'Stretch & pump', kind:'glute', items:[
-    it('banded_bridge',2,15,20), it('pull_through',3,8,12), it('reverse_hyper',3,10,12),
-    it('sl_thrust',3,8,12), it('abd_lean',3,10,15), it('kick_quad',2,12,15) ]},
-  upper_b:  { name:'Upper + Abs \u00b7 Push', sub:'Chest, arms & abs', kind:'upper', items:[
-    it('chest_press',3,10,12), it('assisted_pullup',3,8,10), it('rear_fly',3,12,15),
-    it('db_curl',2,12,15), it('tri_pushdown',2,12,15), it('reverse_crunch',3,12,15), it('pallof',3,10,12) ]}
+  p_power:  { name:'Glute Power', sub:'Heavy hips & hamstrings', kind:'glute', items:[
+    it('hip_thrust',4,6,10), it('rdl',3,8,12), it('rev_lunge',3,10,12),
+    it('abd_lean',3,15,20), it('hang_leg',3,10,15) ]},
+  p_push:   { name:'Upper \u00b7 Push + Core', sub:'Chest, shoulders, triceps & abs', kind:'upper', items:[
+    it('inc_db_press',3,8,12), it('shoulder_press',3,8,12), it('lateral_raise',3,12,20),
+    it('db_skull',3,10,15), it('weighted_crunch',3,12,15) ]},
+  p_volume: { name:'Glute Volume', sub:'Upper & side glute', kind:'glute', items:[
+    it('back_ext',4,12,15), it('kick_cable',3,12,15), it('kas_bridge',3,12,15),
+    it('abd_lean',4,15,20), it('stepup',2,12,12) ]},
+  p_pull:   { name:'Upper \u00b7 Pull + Core', sub:'Back, rear delts, biceps & abs', kind:'upper', items:[
+    it('pullup',3,6,12), it('db_row',3,8,12), it('rear_delt_fly',3,15,20),
+    it('db_curl',3,10,15), it('knee_raise',3,12,15) ]},
+  p_pump:   { name:'Glute Pump', sub:'Single-leg & burnout', kind:'glute', items:[
+    it('sl_thrust',3,10,12), it('bss',3,10,12), it('pull_through',3,12,15),
+    it('band_abd',3,20,25), it('frog_pump',2,20,25) ]}
 };
+
+/* Plan versions. The plan is copied to her phone on first launch;
+   v3 swaps in the summer Peach Plan. Older sessions stay stored
+   (just not in the rotation) so an unfinished workout can close. */
+const PLAN_VER = 3;
+
+const DEFAULT_ORDER = { 4:['p_power','p_push','p_volume','p_pull','p_pump'], 5:['p_power','p_push','p_volume','p_pull','p_pump'] };
+
 /* ===========================================================
    DAILY VERSE
    From the Dhammapada, in F. Max Müller's 1881 translation
@@ -518,27 +539,6 @@ function verseFor(k) {
   const day = Math.round(fromKey(k).getTime() / 86400000);
   return QUOTES[((day * 17) % QUOTES.length + QUOTES.length) % QUOTES.length];
 }
-
-/* Plan changes shipped after launch. The plan is copied to her
-   phone on first launch, so these rewrite saved items, but only
-   ones still on the old numbers: anything she edited stays hers.
-   [session, exercise, old sets, old lo, old hi, new sets, new lo, new hi] */
-const PLAN_UPDATES = [
-  [2, [ // heavier glute work: lower reps, and heavy enough to get near failure
-    ['g_thrust','hip_thrust',4,8,12, 4,6,10], ['g_thrust','bstance',3,10,12, 3,8,10],
-    ['g_thrust','back_ext',3,12,15, 3,8,12], ['g_thrust','abd_lean',3,15,20, 3,10,15],
-    ['g_thrust','kick_cable',2,15,20, 2,10,12],
-    ['g_shape','kick_machine',3,10,15, 3,8,12], ['g_shape','cable_abd',3,12,15, 3,10,12],
-    ['g_shape','smith_thrust',3,10,12, 3,6,10], ['g_shape','seated_abd',3,15,20, 3,10,15],
-    ['g_shape','frog_pump',2,20,30, 2,15,20],
-    ['g_hinge','pull_through',3,12,15, 3,8,12], ['g_hinge','reverse_hyper',3,12,15, 3,10,12],
-    ['g_hinge','sl_thrust',3,10,12, 3,8,12], ['g_hinge','abd_lean',3,15,20, 3,10,15],
-    ['g_hinge','kick_quad',2,15,20, 2,12,15]
-  ]]
-];
-const PLAN_VER = PLAN_UPDATES[PLAN_UPDATES.length - 1][0];
-
-const DEFAULT_ORDER = { 4:['g_thrust','upper_a','g_shape','g_hinge'], 5:['g_thrust','upper_a','g_shape','upper_b','g_hinge'] };
 
 /* ===========================================================
    FOODS
@@ -628,7 +628,7 @@ const BASE_FOODS = FOOD_ROWS.map(toFood);
    "Reset plan" can always restore the original.
    =========================================================== */
 const LS = 'peach.v1';
-const BUILD = '2026-10-16a';
+const BUILD = '2026-11-10a';
 const clone = o => JSON.parse(JSON.stringify(o));
 let S = {
   name:'Jane', weight:115, protein:105, kcal:2050, fat:60, days:5,
@@ -641,13 +641,8 @@ function load() {
 }
 function migratePlan() {
   if ((S.planVer || 1) >= PLAN_VER) return;
-  for (const [ver, rows] of PLAN_UPDATES) {
-    if (ver <= (S.planVer || 1)) continue;
-    for (const [sid, x, os, olo, ohi, ns, nlo, nhi] of rows) {
-      const s = S.sessions[sid]; if (!s) continue;
-      for (const i of s.items) if (i.x === x && i.sets === os && i.rep[0] === olo && i.rep[1] === ohi) { i.sets = ns; i.rep = [nlo, nhi]; }
-    }
-  }
+  S.sessions = Object.assign({}, S.sessions, clone(DEFAULT_SESSIONS));
+  S.order = clone(DEFAULT_ORDER);
   S.planVer = PLAN_VER; save();
 }
 function save() { try { localStorage.setItem(LS, JSON.stringify(S)); } catch (e) { toast('Storage is full'); } }
@@ -891,7 +886,7 @@ function history(x) { return Object.entries(S.logs[x] || {}).sort((a, b) => a[0]
 function lastBefore(x, k) { const h = history(x).filter(([d]) => d < k); return h.length ? h[h.length - 1] : null; }
 const setsText = sets => sets.map(s => (s.w ? s.w + ' × ' : '') + s.r).join(', ');
 function hint(item) {
-  const ex = EX[item.x] || {}; if (ex.p === 'activate') return '';   // warm-ups stay easy
+  const ex = EX[item.x] || {}; if (ex.p === 'activate' || ex.burn) return '';   // warm-ups stay easy, burnouts just chase the burn
   const last = lastBefore(item.x, today());
   if (!last) return ex.bw ? 'First time — bodyweight is fine to learn it. Stop 1–2 reps short of failure.'
     : 'First time — work up over the sets to a weight where you stop 1–2 reps short of failure.';
@@ -1095,13 +1090,11 @@ function vTrain() {
   <div class="card">
     <h3>Grow the glutes, not the legs</h3>
     <ul class="why">
-      <li><b>Glutes 3× a week.</b> Thrusts, abductions, kickbacks and glute-biased hinges — moves where the hips do the work, not the knees.</li>
-      <li><b>Left out on purpose:</b> squats, lunges, split squats, step-ups, leg press and leg extensions. They build quads, which is the “bigger legs” part.</li>
-      <li><b>Warm up the glutes first.</b> Bands before the heavy lift, so the glutes take over and the quads don’t.</li>
-      <li><b>Squeeze and pause at the top</b> of every rep. Feel it in the glute; if you feel it in the front of the thigh, adjust your feet.</li>
-      <li><b>Go heavy.</b> Hip thrusts are 6–10 reps, and every glute move tops out at 15. Each working set should end 1–2 reps short of failure. If you could do 5 more, the weight is too light. Only the band warm-ups stay easy.</li>
-      <li><b>Rest properly.</b> 2–2½ minutes on thrusts, 75–90 s on everything else, so the next set is still heavy.</li>
-      <li><b>Progress the glute lifts.</b> When every set hits the top of the rep range, add weight. The app tells you when.</li>
+      <li><b>Glutes 3× a week, each day with its own job.</b> Power is the heavy day, with the lowest reps of the week, so that's where you add weight. Volume uses higher reps and lots of abduction for the top and sides of the glutes. Pump is single-leg work plus burnout finishers.</li>
+      <li><b>Lunges, step-ups and split squats stay glute-biased.</b> Lean the torso forward and push through the heel. If you feel it in the front of the thigh, lean more.</li>
+      <li><b>Upper days are for tone, not bulk.</b> Clean reps, 1–2 left in the tank, no ego loading.</li>
+      <li><b>Squeeze and pause at the top</b> of every hip-extension rep.</li>
+      <li><b>Work sets end 1–2 reps short of failure.</b> If you could do 5 more, the weight is too light. The app tells you when to add weight. Burnouts just chase the burn.</li>
     </ul>
   </div>
   <button class="btn quiet wide" data-act="reset-plan" style="margin-top:6px">Reset plan to original</button>`;
@@ -1440,7 +1433,7 @@ document.addEventListener('click', e => {
     case 'days': S.days = +arg; save(); render(); break;
     case 'edit-plan': UI.editPlan = !UI.editPlan; render(); break;
     case 'reset-plan':
-      if (confirm('Put the plan back to the original? Your logged workouts stay.')) { S.sessions = clone(DEFAULT_SESSIONS); S.order = clone(DEFAULT_ORDER); S.planVer = PLAN_VER; save(); render(); toast('Plan reset'); }
+      if (confirm('Put the plan back to the original? Your logged workouts stay.')) { S.sessions = Object.assign({}, S.sessions, clone(DEFAULT_SESSIONS)); S.order = clone(DEFAULT_ORDER); S.planVer = PLAN_VER; save(); render(); toast('Plan reset'); }
       break;
     case 'open-sess': UI.editSess = false; openPush({ type:'sess', id: arg }); break;
     case 'edit-sess': UI.editSess = !UI.editSess; renderPush(); break;
