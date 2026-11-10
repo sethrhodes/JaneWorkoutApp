@@ -1,7 +1,7 @@
 /* Peach service worker.
    Cache-first with a background refresh: the gym has no signal, so the app
    must open instantly from cache, then quietly update itself for next time. */
-const VERSION = 'peach-2026-11-10a';
+const VERSION = 'peach-2026-11-10b';
 const SHELL = [
   './',
   './index.html',

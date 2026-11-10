@@ -441,43 +441,59 @@ const EX = {
   reverse_crunch:{ n:'Reverse Crunch', p:'core', rest:30, bw:true, cue:'On your back, knees bent. Roll your hips up off the floor toward your ribs, then lower slowly. Lower abs, with no strain on the neck.' },
   pallof:        { n:'Pallof Press', p:'core', rest:30, cue:'Per side. Press the handle straight out and don’t let it twist you.' }
 };
+const CARDIO_CUE = ' Steady pace: you can still talk in short sentences. It goes after the lifting so the glute work stays strong.';
+Object.assign(EX, {
+  incline_walk:  { n:'Incline Treadmill Walk', p:'cardio', rest:0, cardio:true, cue:'Incline 8–12, speed 2.8–3.5. Don\u2019t hold the handrails. Log the incline as the level.' + CARDIO_CUE },
+  stairmaster:   { n:'StairMaster', p:'cardio', rest:0, cardio:true, cue:'Stand tall, light fingertips on the rails, full steps through the heel.' + CARDIO_CUE },
+  bike:          { n:'Stationary Bike', p:'cardio', rest:0, cardio:true, cue:'Seat at hip height, steady cadence. Log the resistance as the level.' + CARDIO_CUE },
+  elliptical:    { n:'Elliptical', p:'cardio', rest:0, cardio:true, cue:'Push through the heels, stand tall.' + CARDIO_CUE }
+});
 const PATTERNS = {
   activate:'Warm-up', thrust:'Thrust & bridge', abduct:'Abduction', kick:'Kickback', hinge:'Glute hinge', lunge:'Lunge & step-up',
-  pull:'Back', push:'Push', delts:'Shoulders', arms:'Arms', core:'Core'
+  pull:'Back', push:'Push', delts:'Shoulders', arms:'Arms', core:'Core', cardio:'Cardio'
 };
 const GLUTE_P = { activate:1, thrust:1, abduct:1, kick:1, hinge:1, lunge:1 };
 
 /* ===========================================================
    THE PROGRAM
-   The Peach Plan she ran over the summer: five days, glutes
-   three of them, upper body split into push and pull. Sessions
-   aren't tied to weekdays, so she just does whichever is next.
+   Five lift days plus cardio and core on Sunday. Glutes stay at
+   3× a week but with fewer sets (about 30 hard sets a week,
+   down from 45), so she recovers between sessions and can keep
+   adding weight. No band warm-ups. Cardio goes after the lifting
+   on Wednesday and Friday. Wednesday drops some lifting so the
+   session stays the same length. The days are a guide; if she
+   misses one, she just does whichever is next.
    =========================================================== */
 const it = (x, sets, lo, hi) => ({ x, sets, rep:[lo, hi] });
 const DEFAULT_SESSIONS = {
-  p_power:  { name:'Glute Power', sub:'Heavy hips & hamstrings', kind:'glute', items:[
-    it('hip_thrust',4,6,10), it('rdl',3,8,12), it('rev_lunge',3,10,12),
-    it('abd_lean',3,15,20), it('hang_leg',3,10,15) ]},
-  p_push:   { name:'Upper \u00b7 Push + Core', sub:'Chest, shoulders, triceps & abs', kind:'upper', items:[
-    it('inc_db_press',3,8,12), it('shoulder_press',3,8,12), it('lateral_raise',3,12,20),
-    it('db_skull',3,10,15), it('weighted_crunch',3,12,15) ]},
-  p_volume: { name:'Glute Volume', sub:'Upper & side glute', kind:'glute', items:[
-    it('back_ext',4,12,15), it('kick_cable',3,12,15), it('kas_bridge',3,12,15),
-    it('abd_lean',4,15,20), it('stepup',2,12,12) ]},
-  p_pull:   { name:'Upper \u00b7 Pull + Core', sub:'Back, rear delts, biceps & abs', kind:'upper', items:[
-    it('pullup',3,6,12), it('db_row',3,8,12), it('rear_delt_fly',3,15,20),
-    it('db_curl',3,10,15), it('knee_raise',3,12,15) ]},
-  p_pump:   { name:'Glute Pump', sub:'Single-leg & burnout', kind:'glute', items:[
-    it('sl_thrust',3,10,12), it('bss',3,10,12), it('pull_through',3,12,15),
-    it('band_abd',3,20,25), it('frog_pump',2,20,25) ]}
+  g_thrust: { name:'Glutes · Thrust', sub:'Heavy day + abs', kind:'glute', items:[
+    it('hip_thrust',4,6,10), it('bstance',3,8,10), it('back_ext',3,8,12),
+    it('abd_lean',3,10,15), it('hang_leg',3,10,15) ]},
+  upper_a:  { name:'Upper + Abs \u00b7 Pull', sub:'Back, shoulders & abs', kind:'upper', items:[
+    it('lat_pulldown',3,10,12), it('cable_row',3,10,12), it('shoulder_press',3,10,12),
+    it('lateral_raise',3,12,15), it('cable_crunch',3,12,15), it('knee_raise',3,10,15) ]},
+  g_shape:  { name:'Glutes · Shape + Cardio', sub:'Side & upper glute, then cardio', kind:'glute', items:[
+    it('smith_thrust',3,6,10), it('kick_machine',3,8,12), it('seated_abd',2,10,15),
+    it('incline_walk',1,12,15) ]},
+  upper_b:  { name:'Upper + Abs \u00b7 Push', sub:'Chest, arms & abs', kind:'upper', items:[
+    it('chest_press',3,10,12), it('assisted_pullup',3,8,10), it('rear_fly',3,12,15),
+    it('db_curl',2,12,15), it('tri_pushdown',2,12,15), it('reverse_crunch',3,12,15), it('pallof',3,10,12) ]},
+  g_hinge:  { name:'Glutes · Hinge + Cardio', sub:'Stretch & single-leg, then cardio', kind:'glute', items:[
+    it('sl_thrust',3,8,12), it('pull_through',3,8,12), it('reverse_hyper',2,10,12),
+    it('abd_lean',2,10,15), it('incline_walk',1,15,20) ]},
+  cardio_core: { name:'Cardio + Core', sub:'Longer cardio, then abs', kind:'upper', items:[
+    it('incline_walk',1,30,40), it('plank',3,30,60), it('dead_bug',3,10,12), it('reverse_crunch',3,12,15) ]}
 };
 
-/* Plan versions. The plan is copied to her phone on first launch;
-   v3 swaps in the summer Peach Plan. Older sessions stay stored
-   (just not in the rotation) so an unfinished workout can close. */
-const PLAN_VER = 3;
+/* Plan versions. The plan is copied to her phone on first launch,
+   so a new version replaces the saved rotation on next open. Older
+   sessions stay stored (just not in the rotation) so an unfinished
+   workout can still close. v4: current plan, lighter glute volume,
+   no warm-ups, cardio + core. */
+const PLAN_VER = 4;
 
-const DEFAULT_ORDER = { 4:['p_power','p_push','p_volume','p_pull','p_pump'], 5:['p_power','p_push','p_volume','p_pull','p_pump'] };
+const DEFAULT_ORDER = { 4:['g_thrust','upper_a','g_shape','g_hinge','cardio_core'], 5:['g_thrust','upper_a','g_shape','upper_b','g_hinge','cardio_core'] };
+const DAY_LABELS = { 4:['Mon','Tue','Thu','Fri','Sun'], 5:['Mon','Tue','Wed','Thu','Fri','Sun'] };
 
 /* ===========================================================
    DAILY VERSE
@@ -628,7 +644,7 @@ const BASE_FOODS = FOOD_ROWS.map(toFood);
    "Reset plan" can always restore the original.
    =========================================================== */
 const LS = 'peach.v1';
-const BUILD = '2026-11-10a';
+const BUILD = '2026-11-10b';
 const clone = o => JSON.parse(JSON.stringify(o));
 let S = {
   name:'Jane', weight:115, protein:105, kcal:2050, fat:60, days:5,
@@ -869,7 +885,7 @@ const moveIn = (arr, a, b) => { const [x] = arr.splice(a, 1); arr.splice(b, 0, x
 const order = () => S.order[S.days];
 const sess = id => S.sessions[id];
 const exName = x => (EX[x] || { n: x }).n;
-function estMin(s) { return Math.round(s.items.reduce((m, i) => m + i.sets * ((EX[i.x] || {}).rest || 60) + i.sets * 40, 0) / 60) + 5; }
+function estMin(s) { return Math.round(s.items.reduce((m, i) => m + ((EX[i.x] || {}).cardio ? i.sets * (i.rep[0] + i.rep[1]) / 2 * 60 : i.sets * ((EX[i.x] || {}).rest || 60) + i.sets * 40), 0) / 60) + 5; }
 function sessionsDone(fromKey_, toKey_) {
   let n = 0; for (const k in S.done) if (k >= fromKey_ && k <= toKey_) n += S.done[k].length; return n;
 }
@@ -886,8 +902,9 @@ function history(x) { return Object.entries(S.logs[x] || {}).sort((a, b) => a[0]
 function lastBefore(x, k) { const h = history(x).filter(([d]) => d < k); return h.length ? h[h.length - 1] : null; }
 const setsText = sets => sets.map(s => (s.w ? s.w + ' × ' : '') + s.r).join(', ');
 function hint(item) {
-  const ex = EX[item.x] || {}; if (ex.p === 'activate' || ex.burn) return '';   // warm-ups stay easy, burnouts just chase the burn
+  const ex = EX[item.x] || {}; if (ex.p === 'activate' || ex.burn || ex.cardio) return '';   // warm-ups stay easy, burnouts just chase the burn
   const last = lastBefore(item.x, today());
+  if (!last && ex.sec) return 'First time — hold as long as you can with good form.';
   if (!last) return ex.bw ? 'First time — bodyweight is fine to learn it. Stop 1–2 reps short of failure.'
     : 'First time — work up over the sets to a weight where you stop 1–2 reps short of failure.';
   const sets = last[1].sets, top = item.rep[1], full = sets.length >= item.sets;
@@ -1027,8 +1044,8 @@ function vToday() {
       <div class="tiny" style="margin-top:6px">Dhammapada ${q[0]}</div></div>${ICON.chev}</div></div>`; })()}
 
   <div class="card">
-    <div class="row"><div class="grow"><h3>${doneWk} of ${S.days} sessions</h3><div class="tiny">This week · dot = protein hit</div></div>
-      <span class="pill ${doneWk >= S.days ? 'good' : 'glute'}">${doneWk >= S.days ? 'Week done' : (S.days - doneWk) + ' to go'}</span></div>
+    <div class="row"><div class="grow"><h3>${doneWk} of ${order().length} sessions</h3><div class="tiny">This week · dot = protein hit</div></div>
+      <span class="pill ${doneWk >= order().length ? 'good' : 'glute'}">${doneWk >= order().length ? 'Week done' : (order().length - doneWk) + ' to go'}</span></div>
     <div class="week">${weekStrip()}</div>
   </div>
 
@@ -1072,16 +1089,16 @@ function vTrain() {
   <div class="eyebrow">Your plan</div>
   <h1>Train</h1>
   <div class="seg" id="days-seg"><div class="thumb" style="width:calc(50% - 4px);transform:translateX(${S.days === 5 ? 'calc(100% + 2px)' : '0'})"></div>
-    <button class="${S.days === 4 ? 'on' : ''}" data-act="days" data-arg="4">4 days a week</button>
-    <button class="${S.days === 5 ? 'on' : ''}" data-act="days" data-arg="5">5 days a week</button></div>
+    <button class="${S.days === 4 ? 'on' : ''}" data-act="days" data-arg="4">4 lift days</button>
+    <button class="${S.days === 5 ? 'on' : ''}" data-act="days" data-arg="5">5 lift days</button></div>
   <div class="sec"><h2>Rotation</h2><button class="link" data-act="edit-plan">${UI.editPlan ? 'Done' : 'Reorder'}</button></div>
-  <div class="tiny" style="margin:-4px 4px 10px">Not tied to weekdays — just do whichever is next when you get to the gym.</div>
+  <div class="tiny" style="margin:-4px 4px 10px">The days are a guide. Miss one and just do whichever is next.</div>
   <div id="plan-list">
     ${o.map((id, i) => { const s = sess(id); return `
       <div class="card press sess ${s.kind}" data-sort data-act="${UI.editPlan ? '' : 'open-sess'}" data-arg="${id}" style="padding:14px 16px">
         <div class="n rnd">${i + 1}</div>
         <div class="grow"><h3>${esc(s.name)}${id === nid ? ' <span class="pill glute" style="margin-left:4px;vertical-align:2px">Next</span>' : ''}</h3>
-          <div class="tiny">${esc(s.sub)} · ${s.items.length} exercises · ~${estMin(s)} min</div></div>
+          <div class="tiny">${(DAY_LABELS[S.days] || [])[i] && o.length === DAY_LABELS[S.days].length ? DAY_LABELS[S.days][i] + ' · ' : ''}${esc(s.sub)} · ${s.items.length} exercises · ~${estMin(s)} min</div></div>
         ${UI.editPlan ? `<span class="handle" aria-label="Drag to reorder">${ICON.grip}</span>` : ICON.chev}
       </div>`; }).join('')}
   </div>
@@ -1090,11 +1107,11 @@ function vTrain() {
   <div class="card">
     <h3>Grow the glutes, not the legs</h3>
     <ul class="why">
-      <li><b>Glutes 3× a week, each day with its own job.</b> Power is the heavy day, with the lowest reps of the week, so that's where you add weight. Volume uses higher reps and lots of abduction for the top and sides of the glutes. Pump is single-leg work plus burnout finishers.</li>
-      <li><b>Lunges, step-ups and split squats stay glute-biased.</b> Lean the torso forward and push through the heel. If you feel it in the front of the thigh, lean more.</li>
-      <li><b>Upper days are for tone, not bulk.</b> Clean reps, 1–2 left in the tank, no ego loading.</li>
-      <li><b>Squeeze and pause at the top</b> of every hip-extension rep.</li>
-      <li><b>Work sets end 1–2 reps short of failure.</b> If you could do 5 more, the weight is too light. The app tells you when to add weight. Burnouts just chase the burn.</li>
+      <li><b>Glutes 3× a week, fewer sets.</b> About 30 hard glute sets a week, down from 45. Glutes grow between sessions, so more sets than she can recover from can stall progress.</li>
+      <li><b>Hip thrusts every glute day:</b> barbell on Monday, Smith machine on Wednesday, single-leg on Friday.</li>
+      <li><b>Cardio after lifting</b> on Wednesday and Friday, and a longer session on Sunday. Steady pace, so it doesn't eat into recovery.</li>
+      <li><b>Core 4× a week:</b> Monday, both upper days and Sunday.</li>
+      <li><b>Work sets end 1–2 reps short of failure.</b> If you could do 5 more, the weight is too light. The app tells you when to add weight. That steady weight increase is what drives growth.</li>
     </ul>
   </div>
   <button class="btn quiet wide" data-act="reset-plan" style="margin-top:6px">Reset plan to original</button>`;
@@ -1145,16 +1162,16 @@ function exCard(i) {
   const allDone = rows.length && rows.every(r => r.done);
   return `<div class="card ex" data-card="${i.x}">
     <div class="head"><div class="grow"><h3>${esc(ex.n)} ${allDone ? '<span class="pill good" style="vertical-align:2px">Done</span>' : ''}</h3>
-      <div class="tgt">${i.sets} sets × ${i.rep[0]}–${i.rep[1]} ${ex.sec ? 'sec' : 'reps'} · rest ${ex.rest || 60}s</div></div>
+      <div class="tgt">${ex.cardio ? `${i.rep[0]}–${i.rep[1]} min · steady pace` : `${i.sets} sets × ${i.rep[0]}–${i.rep[1]} ${ex.sec ? 'sec' : 'reps'} · rest ${ex.rest || 60}s`}</div></div>
       <button class="icon-btn" data-act="cue" data-arg="${i.x}" aria-label="How to">${UI.openCue[i.x] ? ICON.x : '<b style="font-size:15px">?</b>'}</button></div>
     ${UI.openCue[i.x] && ex.cue ? `<div class="cue">${esc(ex.cue)}</div>` : ''}
     ${last ? `<div class="last">Last · ${niceDate(last[0])} — ${esc(setsText(last[1].sets))}</div>` : ''}
     ${h ? `<div class="hint">${esc(h)}</div>` : ''}
-    <div class="colhead"><span>Set</span><span>${ex.bw ? 'Added lb' : 'Weight'}</span><span>${ex.sec ? 'Sec' : 'Reps'}</span><span></span></div>
+    <div class="colhead"><span>Set</span><span>${ex.cardio ? 'Level' : ex.bw ? 'Added lb' : 'Weight'}</span><span>${ex.cardio ? 'Min' : ex.sec ? 'Sec' : 'Reps'}</span><span></span></div>
     <div class="sets">${rows.map((r, n) => `<div class="set ${r.done ? 'done' : ''}">
       <span class="k rnd">${n + 1}</span>
-      <label><input inputmode="decimal" data-in="w" data-x="${i.x}" data-n="${n}" value="${esc(r.w)}" placeholder="${ex.bw ? '0' : '–'}"><span>lb</span></label>
-      <label><input inputmode="numeric" data-in="r" data-x="${i.x}" data-n="${n}" value="${esc(r.r)}" placeholder="${i.rep[1]}"><span>${ex.sec ? 's' : ''}</span></label>
+      <label><input inputmode="decimal" data-in="w" data-x="${i.x}" data-n="${n}" value="${esc(r.w)}" placeholder="${ex.bw ? '0' : '–'}"><span>${ex.cardio ? '' : 'lb'}</span></label>
+      <label><input inputmode="numeric" data-in="r" data-x="${i.x}" data-n="${n}" value="${esc(r.r)}" placeholder="${i.rep[1]}"><span>${ex.sec ? 's' : ex.cardio ? 'min' : ''}</span></label>
       <button class="tick" data-act="tick" data-x="${i.x}" data-n="${n}" aria-label="Done">${ICON.check}</button></div>`).join('')}</div>
     <button class="link" style="margin-top:10px;font-size:14px" data-act="add-set" data-arg="${i.x}">+ Add set</button>
   </div>`;
@@ -1298,7 +1315,7 @@ function vProgress() {
   const delta = thisWk != null && lastWk != null ? r1(thisWk - lastWk) : null;
   let bars = '';
   for (let i = 13; i >= 0; i--) { const k = addDays(t, -i), p = totals(k).p; bars += `<i class="${k === t ? 'today' : p >= S.protein * 0.95 ? 'hit' : ''}" style="height:${Math.min(100, p / (S.protein * 1.3) * 100)}%"></i>`; }
-  const lifts = Object.keys(S.logs).filter(x => history(x).length && (EX[x] || {}).p !== 'activate').sort((a, b) => (GLUTE_P[(EX[b] || {}).p] ? 1 : 0) - (GLUTE_P[(EX[a] || {}).p] ? 1 : 0));
+  const lifts = Object.keys(S.logs).filter(x => history(x).length && (EX[x] || {}).p !== 'activate' && !(EX[x] || {}).cardio).sort((a, b) => (GLUTE_P[(EX[b] || {}).p] ? 1 : 0) - (GLUTE_P[(EX[a] || {}).p] ? 1 : 0));
   return `
   <div class="eyebrow">Slow and steady</div>
   <h1>Progress</h1>
@@ -1411,7 +1428,7 @@ function librarySheet(sid, replaceIdx, pattern) {
   sh => {
     sh.querySelectorAll('[data-pick]').forEach(el => el.onclick = () => {
       const x = el.dataset.pick, e = EX[x];
-      const def = GLUTE_P[e.p] ? (e.p === 'activate' ? [2, 15, 20] : e.p === 'thrust' && !e.bw ? [3, 8, 12] : [3, 12, 15]) : [3, 10, 12];
+      const def = e.cardio ? [1, 15, 20] : GLUTE_P[e.p] ? (e.p === 'activate' ? [2, 15, 20] : e.p === 'thrust' && !e.bw ? [3, 8, 12] : [3, 12, 15]) : [3, 10, 12];
       if (replaceIdx != null) { const old = s.items[replaceIdx]; s.items[replaceIdx] = { x, sets: old.sets, rep: old.rep.slice() }; }
       else s.items.push(it(x, def[0], def[1], def[2]));
       save(); closeSheet(); renderPush(); toast(replaceIdx != null ? 'Swapped' : 'Added');
@@ -1464,7 +1481,7 @@ document.addEventListener('click', e => {
         if (inp && it_) { r.r = String(it_.rep[1]); }
       }
       r.done = !r.done; commitEx(el.dataset.x); buzz(r.done ? 18 : 8);
-      if (r.done) startRest((EX[el.dataset.x] || {}).rest || 60);
+      if (r.done && !(EX[el.dataset.x] || {}).cardio) startRest((EX[el.dataset.x] || {}).rest || 60);
       renderPush(); break;
     }
     case 'add-set': { const rows = S.draft.ex[arg]; rows.push({ w: rows.length ? rows[rows.length - 1].w : '', r: '', done: false }); save(); renderPush(); break; }
